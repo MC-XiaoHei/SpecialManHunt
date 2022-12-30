@@ -37,6 +37,7 @@ public class SpecialManHunt implements ModInitializer {
     public void refreshCompass(@NotNull ServerPlayerEntity player){
         PlayerInventory inv=player.getInventory();
         Vec3d pos=getRunnerPos(player);
+        if(pos==null) return;
         ItemStack item=new ItemStack(Items.COMPASS,1);
         NbtCompound nbt = new NbtCompound(),
                     nbtPos = new NbtCompound();
@@ -70,11 +71,11 @@ public class SpecialManHunt implements ModInitializer {
         else player.sendMessage(Text.literal("指南针已指向速通者最后的位置"));
     }
     public Vec3d getRunnerPos(@NotNull ServerPlayerEntity player){
-        Vec3d pos=player.getPos();
+        Vec3d pos=null;
         if(inWorld(player,World.OVERWORLD) && overWorldPos!=null)pos=overWorldPos;
         else if(inWorld(player,World.NETHER) && netherPos!=null)pos=netherPos;
         else if(inWorld(player,World.END) && theEndPos!=null)pos=theEndPos;
-        else player.sendMessage(Text.literal("速通者尚未到达此维度！指南针失效！"));
+        else player.sendMessage(Text.literal("速通者尚未到达此维度，指南针失效！"));
         return pos;
     }
     public void reload(){
