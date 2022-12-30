@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "specialmanhunt",
+  "version": "${version}",
+  "name": "Specialmanhunt",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/specialmanhunt/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "client": [
+      "tk.xor7.specialmanhunt.client.SpecialmanhuntClient"
+    ],
+    "main": [
+      "tk.xor7.specialmanhunt.SpecialManHunt"
+    ]
+  },
+  "mixins": [
+    "specialmanhunt.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.12",
+    "fabric": "*",
+    "minecraft": "1.19.3"
+  }
+}
