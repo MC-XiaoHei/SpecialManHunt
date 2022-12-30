@@ -16,6 +16,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import xor7studio.util.Xor7IO;
 import xor7studio.util.Xor7Runnable;
 
 import java.util.HashSet;
@@ -163,6 +164,7 @@ public class SpecialManHunt implements ModInitializer {
             return TypedActionResult.pass(ItemStack.EMPTY);
         });
         reload();
+        Xor7IO.modId="Xor7SpecialManhunt";
         new Xor7Runnable(){
             @Override
             public void run() {
