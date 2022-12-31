@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -30,8 +31,9 @@ import static net.minecraft.server.command.CommandManager.literal;
 public class SpecialManHunt implements ModInitializer {
     public static MinecraftServer server;
     public ServerPlayerEntity speedRunner;
-    public Set<ServerPlayerEntity> protectors;
+    public Set<ServerPlayerEntity> hunters;
     public Vec3d overWorldPos,netherPos,theEndPos;
+    public Team hunter;
     public boolean inWorld(@NotNull ServerPlayerEntity player, RegistryKey<World> world){
         return player.getWorld() == server.getWorld(world);
     }
@@ -81,7 +83,7 @@ public class SpecialManHunt implements ModInitializer {
     }
     public void reload(){
         speedRunner=null;
-        protectors=new HashSet<>();
+        hunters=new HashSet<>();
         overWorldPos=netherPos=theEndPos=null;
     }
     @Override
@@ -103,7 +105,7 @@ public class SpecialManHunt implements ModInitializer {
                                     return 1;
                                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                dispatcher.register(literal("protector")
+                dispatcher.register(literal("hunter")
                         .requires(source -> source.hasPermissionLevel(1))
                         .then(argument("name", StringArgumentType.greedyString())
                                 .executes(context -> {
@@ -112,10 +114,15 @@ public class SpecialManHunt implements ModInitializer {
                                     ServerPlayerEntity tmp=server.getPlayerManager().getPlayer(name);
                                     if(tmp==null)
                                         Objects.requireNonNull(context.getSource().getPlayer()).sendMessage(Text.literal("该玩家不存在！"));
-                                    protectors.add(tmp);
+                                    hunters.add(tmp);
+                                    if(hunter==null){
+                                        hunter=server.getScoreboard().addTeam("hunter");
+                                        hunter.setPrefix(Text.literal("[猎人]"));
+                                    }
+                                    server.getScoreboard().addPlayerToTeam(tmp.getEntityName(),hunter);
                                     CopyOnWriteArrayList<net.minecraft.server.network.ServerPlayerEntity> list= new CopyOnWriteArrayList<>(server.getPlayerManager().getPlayerList());
                                     for(ServerPlayerEntity player:list)
-                                        player.sendMessage(Text.literal("已将"+ Objects.requireNonNull(context.getSource().getPlayer()).getName()+"设置为保护者"));
+                                        player.sendMessage(Text.literal("已将"+ tmp.getName().getString()+"设置为猎人"));
                                     return 1;
                                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
@@ -128,10 +135,11 @@ public class SpecialManHunt implements ModInitializer {
                                     ServerPlayerEntity tmp=server.getPlayerManager().getPlayer(name);
                                     if(tmp==null)
                                         Objects.requireNonNull(context.getSource().getPlayer()).sendMessage(Text.literal("该玩家不存在！"));
-                                    protectors.add(tmp);
+                                    hunters.add(tmp);
+                                    server.getScoreboard().removePlayerFromTeam(tmp.getEntityName(),hunter);
                                     CopyOnWriteArrayList<net.minecraft.server.network.ServerPlayerEntity> list= new CopyOnWriteArrayList<>(server.getPlayerManager().getPlayerList());
                                     for(ServerPlayerEntity player:list)
-                                        player.sendMessage(Text.literal("已将"+ Objects.requireNonNull(context.getSource().getPlayer()).getName()+"从保护者中移除"));
+                                        player.sendMessage(Text.literal("已将"+ Objects.requireNonNull(tmp).getName().getString()+"从猎人中移除"));
                                     return 1;
                                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
