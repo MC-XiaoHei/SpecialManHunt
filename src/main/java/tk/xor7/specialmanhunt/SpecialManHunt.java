@@ -88,7 +88,7 @@ public class SpecialManHunt implements ModInitializer {
     public void onInitialize() {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(literal("runner")
-                        .requires(source -> source.hasPermissionLevel(4))
+                        .requires(source -> source.hasPermissionLevel(1))
                         .then(argument("name", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     String name = StringArgumentType.getString(context, "name");
@@ -104,7 +104,7 @@ public class SpecialManHunt implements ModInitializer {
                                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(literal("protector")
-                        .requires(source -> source.hasPermissionLevel(4))
+                        .requires(source -> source.hasPermissionLevel(1))
                         .then(argument("name", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     String name = StringArgumentType.getString(context, "name");
@@ -120,7 +120,7 @@ public class SpecialManHunt implements ModInitializer {
                                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(literal("remove")
-                        .requires(source -> source.hasPermissionLevel(4))
+                        .requires(source -> source.hasPermissionLevel(1))
                         .then(argument("name", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     String name = StringArgumentType.getString(context, "name");
@@ -136,7 +136,7 @@ public class SpecialManHunt implements ModInitializer {
                                 }))));
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(literal("reloadGame")
-                        .requires(source -> source.hasPermissionLevel(4))
+                        .requires(source -> source.hasPermissionLevel(1))
                                 .executes(context -> {
                                     server=context.getSource().getServer();
                                     reload();

@@ -4,7 +4,8 @@
   "package": "tk.xor7.specialmanhunt.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MinecraftServerMixin"
+    "MinecraftServerMixin",
+    "PiglinBruteEntityMixin"
   ],
   "client": [
   ],
